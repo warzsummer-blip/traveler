@@ -11,7 +11,9 @@
         <div class="one-post col-sm-4 mb-3">
           <%= link_to post_path(post) do %>
             <%# 投稿者の名前を動的に表示 %>
-            <p class="caption"><%= post.user.name if post.user %></p>
+
+            <%# user が nil のときはエラーを出さずに何も表示しない（または nil を返す） %>
+            <p class="caption"><%= post.user&.name %></p>
             
             <% if post.image.attached? %>
             <%= image_tag post.image, size: "300x200" %>
