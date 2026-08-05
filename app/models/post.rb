@@ -1,10 +1,14 @@
 class Post < ApplicationRecord
-    has_one_attached :image
-    belongs_to :user
-    has_many :comments, dependent: :destroy
-    has_many :favorites, dependent: :destroy
+  has_one_attached :image  # または has_one_attached :image
+  belongs_to :user
+  has_many :comments, dependent: :destroy
+  has_many :favorites, dependent: :destroy
 
-    def favorited_by?(user)
-      favorites.where(user_id: user.id).exists?
-    end
+  validates :location, presence: true, length: { maximum: 15 }
+  validates :text, presence: true, length: { maximum: 195 }
+  validates :image, presence: true
+
+  def favorited_by?(user)
+    favorites.where(user_id: user.id).exists?
+  end
 end
