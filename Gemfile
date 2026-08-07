@@ -74,3 +74,5 @@ gem 'dartsass-sprockets'
 gem 'devise'
 
 gem 'kaminari'
+
+gem 'enum_help'

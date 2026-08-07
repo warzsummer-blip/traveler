@@ -1,29 +1,27 @@
 Rails.application.routes.draw do
- devise_for :users
- resources :posts
- resources :users, only:[:index, :show]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  devise_for :users
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # トップページ
+  root to: "homes#top"
+
+  # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
-  root :to => "homes#top"
-
+  # 投稿機能（コメント・いいね・確認画面を1つにまとめる）
   resources :posts do
-  resources :comments, only:[:create, :destroy]
-end
-  resources :posts do
-  resources :comments, only:[:create, :destroy]
-  resource :favorites, only:[:create, :destroy]
-end
-resources :users, only:[:index, :show, :edit, :update] do
-  member do
-    get :follows, :followers
+    resources :comments, only: [:create, :destroy]
+    resource :favorites, only: [:create, :destroy]
+    
+    collection do
+      get :confirm # POST送信にしたい場合は get から post に変更してください
+    end
   end
-  resource :relationships, only: [:create, :destroy]
-end
 
+  # ユーザー機能（フォロー・フォロワー・関係性を1つにまとめる）
+  resources :users, only: [:index, :show, :edit, :update] do
+    member do
+      get :follows, :followers
+    end
+    resource :relationships, only: [:create, :destroy]
+  end
 end
